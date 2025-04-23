@@ -1,0 +1,7 @@
+node_modules/
+
+openapitools.json
+package.json
+package-lock.json
+yarn.lock
+yarn-error.log
