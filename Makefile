@@ -97,7 +97,7 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 	$Q jq '.description = "$(SDK_ANGULAR_DESCRIPTION)"' $(SDK_ANGULAR_JSON) | sponge $(SDK_ANGULAR_JSON)
 	$Q jq '.author = "$(SDK_AUTHOR)"' $(SDK_ANGULAR_JSON) | sponge $(SDK_ANGULAR_JSON)
 	$Q jq '.keywords = [$(SDK_ANGULAR_KEYWORDS)]' $(SDK_ANGULAR_JSON) | sponge $(SDK_ANGULAR_JSON)
-	$Q jq '.repository.url = "$(PACKAGE_URL).git"' $(SDK_ANGULAR_JSON) | sponge $(SDK_ANGULAR_JSON)
+	$Q jq '.repository.url = "git+$(PACKAGE_URL).git"' $(SDK_ANGULAR_JSON) | sponge $(SDK_ANGULAR_JSON)
 	$Q rm -f $(SDK_ANGULAR_DIR)/.gitignore
 	$Q rm -rf $(SDK_ANGULAR_DIR)/.openapi-generator
 	$Q rm -f $(SDK_ANGULAR_DIR)/.openapi-generator-ignore
