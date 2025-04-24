@@ -17,6 +17,12 @@ jobs:
           node-version: 22
       - run: sudo apt-get -y install moreutils
       - run: make sdk
+      - run: make dist
+      - name: Store distribution package
+        uses: actions/upload-artifact@v4
+        with:
+          name: javascript-package-distributions
+          path: dist/
 
   publish-to-npmjs:
     name: Publish to NpmJS
@@ -33,7 +39,45 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org/
           scope: '@kowabunga-cloud'
-      - run: make dist
-      - run: cd packages/angular/dist && npm publish --provenance --access public
+      - name: Download distribution package
+        uses: actions/download-artifact@v4
+        with:
+          name: javascript-package-distributions
+          path: dist/
+      - name: Publish Angular package to NPM registry
+        run: cd dist/angular && npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  github-release:
+    name: Upload to GitHub Release
+    needs: publish-to-npmjs
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # IMPORTANT: mandatory for making GitHub Releases
+      id-token: write  # IMPORTANT: mandatory for sigstore
+
+    steps:
+      - name: Download distribution package
+        uses: actions/download-artifact@v4
+        with:
+          name: javascript-package-distributions
+          path: dist/
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create
+          "$GITHUB_REF_NAME"
+          --repo "$GITHUB_REPOSITORY"
+          --notes ""
+      - name: Upload artifact signatures to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        # Upload to GitHub Release using the `gh` CLI.
+        # `dist/` contains the built packages.
+        run: >-
+          gh release upload
+          "$GITHUB_REF_NAME" dist/**
+          --repo "$GITHUB_REPOSITORY"
