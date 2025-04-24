@@ -48,6 +48,18 @@ jobs:
         run: cd dist/angular && npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish Aurelia package to NPM registry
+        run: cd dist/aurelia && npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish Node.JS package to NPM registry
+        run: cd dist/node && npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish RxJS package to NPM registry
+        run: cd dist/rxjs && npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   github-release:
     name: Upload to GitHub Release
