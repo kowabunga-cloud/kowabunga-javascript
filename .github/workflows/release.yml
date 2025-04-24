@@ -17,7 +17,6 @@ jobs:
           node-version: 22
       - run: sudo apt-get -y install moreutils
       - run: make sdk
-      - run: make dist
 
   publish-to-npmjs:
     name: Publish to NpmJS
@@ -30,6 +29,7 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
+      - run: make dist
       - run: cd packages/angular/dist && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
