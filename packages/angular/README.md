@@ -1,4 +1,4 @@
-# @kowabunga/angular@0.52.5
+# @kowabunga-cloud/angular@0.52.5
 
 Kvm Orchestrator With A BUNch of Goods Added
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @kowabunga/angular@0.52.5 --save
+npm install @kowabunga-cloud/angular@0.52.5 --save
 ```
 
 _without publishing (not recommended):_
@@ -46,7 +46,7 @@ npm link
 In your project:
 
 ```console
-npm link @kowabunga/angular
+npm link @kowabunga-cloud/angular
 ```
 
 __Note for Windows users:__ The Angular CLI has troubles to use linked npm packages.
@@ -59,7 +59,7 @@ In your Angular project:
 
 ```typescript
 // without configuring providers
-import { ApiModule } from '@kowabunga/angular';
+import { ApiModule } from '@kowabunga-cloud/angular';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -78,7 +78,7 @@ export class AppModule {}
 
 ```typescript
 // configuring providers
-import { ApiModule, Configuration, ConfigurationParameters } from '@kowabunga/angular';
+import { ApiModule, Configuration, ConfigurationParameters } from '@kowabunga-cloud/angular';
 
 export function apiConfigFactory (): Configuration {
   const params: ConfigurationParameters = {
@@ -98,7 +98,7 @@ export class AppModule {}
 
 ```typescript
 // configuring providers with an authentication service that manages your access tokens
-import { ApiModule, Configuration } from '@kowabunga/angular';
+import { ApiModule, Configuration } from '@kowabunga-cloud/angular';
 
 @NgModule({
     imports: [ ApiModule ],
@@ -122,7 +122,7 @@ export class AppModule {}
 ```
 
 ```typescript
-import { DefaultApi } from '@kowabunga/angular';
+import { DefaultApi } from '@kowabunga-cloud/angular';
 
 export class AppComponent {
     constructor(private apiGateway: DefaultApi) { }
@@ -162,7 +162,7 @@ export class AppModule {
 If different than the generated base path, during app bootstrap, you can provide the base path to your service.
 
 ```typescript
-import { BASE_PATH } from '@kowabunga/angular';
+import { BASE_PATH } from '@kowabunga-cloud/angular';
 
 bootstrap(AppComponent, [
     { provide: BASE_PATH, useValue: 'https://your-web-service.com' },
@@ -172,7 +172,7 @@ bootstrap(AppComponent, [
 or
 
 ```typescript
-import { BASE_PATH } from '@kowabunga/angular';
+import { BASE_PATH } from '@kowabunga-cloud/angular';
 
 @NgModule({
     imports: [],
@@ -197,7 +197,7 @@ export const environment = {
 In the src/app/app.module.ts:
 
 ```typescript
-import { BASE_PATH } from '@kowabunga/angular';
+import { BASE_PATH } from '@kowabunga-cloud/angular';
 import { environment } from '../environments/environment';
 
 @NgModule({
