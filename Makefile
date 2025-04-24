@@ -63,6 +63,7 @@ PACKAGES_DIR = packages
 
 # use "heads/master" to build from latest
 SDK_OPENAPI_VERSION = tags/v0.52.5
+SDK_RELEASE = 0.52.5.0
 SDK_OPENAPI_SPEC = "https://raw.githubusercontent.com/kowabunga-cloud/openapi/refs/$(SDK_OPENAPI_VERSION)/openapi.yaml"
 SDK_PKG_NAME = kowabunga-cloud
 SDK_LICENSE = Apache-2.0
@@ -87,7 +88,7 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 	  -g $(SDK_ANGULAR_GENERATOR) \
 	  --package-name $(SDK_ANGULAR_PKG_NAME) \
 	  --openapi-normalizer KEEP_ONLY_FIRST_TAG_IN_OPERATION=true \
-          --additional-properties=ngVersion=$(SDK_ANGULAR_VERSION),npmName=$(SDK_ANGULAR_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
+          --additional-properties=npmVersion=$(SDK_RELEASE),ngVersion=$(SDK_ANGULAR_VERSION),npmName=$(SDK_ANGULAR_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
 	  -p packageVersion=$(SDK_OPENAPI_VERSION:tags/v%=%) \
 	  -p packageUrl="$(PACKAGE_URL)" \
 	  -i $(SDK_OPENAPI_SPEC) \
@@ -110,8 +111,9 @@ DIST_DIR = dist
 
 .PHONY: dist
 dist: dist-angular
+	$Q rm -rf $(DIST_DIR)
 	$Q mkdir -p $(DIST_DIR)
-	$Q mv $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
+	$Q cp -rf $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
 
 .PHONY: dist-angular
 dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @

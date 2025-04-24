@@ -1,11 +1,11 @@
 {
   "name": "@kowabunga-cloud/angular",
-  "version": "0.52.5",
+  "version": "0.52.5.0",
   "description": "Official Kowabunga SDK for Angular",
   "author": "The Kowabunga Project",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kowabunga-cloud/kowabunga-javascript.git"
+    "url": "git+https://github.com/kowabunga-cloud/kowabunga-javascript.git"
   },
   "keywords": [
     "kowabunga",
