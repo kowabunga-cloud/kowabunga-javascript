@@ -72,7 +72,7 @@ SDK_AUTHOR = The Kowabunga Project
 SDK_KEYWORDS = "kowabunga"
 
 .PHONY: sdk
-sdk: sdk-angular sdk-node
+sdk: sdk-angular sdk-node sdk-aurelia
 
 SDK_ANGULAR_GENERATOR = typescript-angular
 SDK_ANGULAR_PKG_NAME = @$(SDK_PKG_NAME)/angular
@@ -131,6 +131,34 @@ sdk-node: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate Node.JS SDK c
 	$Q rm -f $(SDK_NODE_DIR)/.openapi-generator-ignore
 	$Q rm -f $(SDK_NODE_DIR)/git_push.sh
 
+SDK_AURELIA_GENERATOR = typescript-aurelia
+SDK_AURELIA_PKG_NAME = @$(SDK_PKG_NAME)/aurelia
+SDK_AURELIA_DIR = $(PACKAGES_DIR)/aurelia
+SDK_AURELIA_JSON = $(SDK_AURELIA_DIR)/package.json
+SDK_AURELIA_DESCRIPTION = $(SDK_DESCRIPTION) Aurelia
+SDK_AURELIA_KEYWORDS = $(SDK_KEYWORDS), "aurelia"
+
+.PHONY: sdk-aurelia
+sdk-aurelia: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate Aurelia SDK client code…) @
+	$Q $(GENERATOR) generate \
+	  -g $(SDK_AURELIA_GENERATOR) \
+	  --package-name $(SDK_AURELIA_PKG_NAME) \
+	  --openapi-normalizer KEEP_ONLY_FIRST_TAG_IN_OPERATION=true \
+          --additional-properties=npmVersion=$(SDK_RELEASE),npmName=$(SDK_AURELIA_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
+	  -p packageVersion=$(SDK_RELEASE) \
+	  -p packageUrl="$(PACKAGE_URL)" \
+	  -i $(SDK_OPENAPI_SPEC) \
+	  -o $(SDK_AURELIA_DIR) \
+	  $(OUT)
+	$Q jq '.description = "$(SDK_AURELIA_DESCRIPTION)"' $(SDK_AURELIA_JSON) | sponge $(SDK_AURELIA_JSON)
+	$Q jq '.author = "$(SDK_AUTHOR)"' $(SDK_AURELIA_JSON) | sponge $(SDK_AURELIA_JSON)
+	$Q jq '.keywords = [$(SDK_AURELIA_KEYWORDS)]' $(SDK_AURELIA_JSON) | sponge $(SDK_AURELIA_JSON)
+	$Q jq '.repository.url = "git+$(PACKAGE_URL).git"' $(SDK_AURELIA_JSON) | sponge $(SDK_AURELIA_JSON)
+	$Q rm -f $(SDK_AURELIA_DIR)/.gitignore
+	$Q rm -rf $(SDK_AURELIA_DIR)/.openapi-generator
+	$Q rm -f $(SDK_AURELIA_DIR)/.openapi-generator-ignore
+	$Q rm -f $(SDK_AURELIA_DIR)/git_push.sh
+
 ################
 # Distribution #
 ################
@@ -139,11 +167,12 @@ DIST_DIR = dist
 RELEASE_DIR = release
 
 .PHONY: dist
-dist: dist-angular dist-node
+dist: dist-angular dist-node dist-aurelia
 	$Q rm -rf $(DIST_DIR)
 	$Q mkdir -p $(DIST_DIR)
 	$Q cp -rf $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
 	$Q cp -rf $(SDK_NODE_DIR)/dist $(DIST_DIR)/node
+	$Q cp -rf $(SDK_AURELIA_DIR)/dist $(DIST_DIR)/aurelia
 
 .PHONY: dist-angular
 dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @
@@ -159,9 +188,17 @@ dist-node: ; $(info $(M) [Npm] Building distributable Node.JS SDK client code…
 	  npm ci && \
 	  npm run build
 
+.PHONY: dist-aurelia
+dist-aurelia: ; $(info $(M) [Npm] Building distributable Aurelia SDK client code…) @
+	$Q cd $(SDK_AURELIA_DIR) && \
+	  npm install && \
+	  npm ci && \
+	  npm run build
+
 .PHONY: release
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
 	$Q rm -rf $(RELEASE_DIR)
 	$Q mkdir -p $(RELEASE_DIR)
 	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
 	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-node-$(SDK_RELEASE).tgz dist/node
+	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-aurelia-$(SDK_RELEASE).tgz dist/aurelia
