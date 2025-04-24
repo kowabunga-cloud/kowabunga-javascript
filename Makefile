@@ -72,7 +72,7 @@ SDK_AUTHOR = The Kowabunga Project
 SDK_KEYWORDS = "kowabunga"
 
 .PHONY: sdk
-sdk: sdk-angular
+sdk: sdk-angular sdk-node
 
 SDK_ANGULAR_GENERATOR = typescript-angular
 SDK_ANGULAR_PKG_NAME = @$(SDK_PKG_NAME)/angular
@@ -89,7 +89,7 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 	  --package-name $(SDK_ANGULAR_PKG_NAME) \
 	  --openapi-normalizer KEEP_ONLY_FIRST_TAG_IN_OPERATION=true \
           --additional-properties=npmVersion=$(SDK_RELEASE),ngVersion=$(SDK_ANGULAR_VERSION),npmName=$(SDK_ANGULAR_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
-	  -p packageVersion=$(SDK_OPENAPI_VERSION:tags/v%=%) \
+	  -p packageVersion=$(SDK_RELEASE) \
 	  -p packageUrl="$(PACKAGE_URL)" \
 	  -i $(SDK_OPENAPI_SPEC) \
 	  -o $(SDK_ANGULAR_DIR) \
@@ -103,6 +103,34 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 	$Q rm -f $(SDK_ANGULAR_DIR)/.openapi-generator-ignore
 	$Q rm -f $(SDK_ANGULAR_DIR)/git_push.sh
 
+SDK_NODE_GENERATOR = typescript-node
+SDK_NODE_PKG_NAME = @$(SDK_PKG_NAME)/node
+SDK_NODE_DIR = $(PACKAGES_DIR)/node
+SDK_NODE_JSON = $(SDK_NODE_DIR)/package.json
+SDK_NODE_DESCRIPTION = $(SDK_DESCRIPTION) Node.JS
+SDK_NODE_KEYWORDS = $(SDK_KEYWORDS), "nodejs"
+
+.PHONY: sdk-node
+sdk-node: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate Node.JS SDK client code…) @
+	$Q $(GENERATOR) generate \
+	  -g $(SDK_NODE_GENERATOR) \
+	  --package-name $(SDK_NODE_PKG_NAME) \
+	  --openapi-normalizer KEEP_ONLY_FIRST_TAG_IN_OPERATION=true \
+          --additional-properties=npmVersion=$(SDK_RELEASE),npmName=$(SDK_NODE_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
+	  -p packageVersion=$(SDK_RELEASE) \
+	  -p packageUrl="$(PACKAGE_URL)" \
+	  -i $(SDK_OPENAPI_SPEC) \
+	  -o $(SDK_NODE_DIR) \
+	  $(OUT)
+	$Q jq '.description = "$(SDK_NODE_DESCRIPTION)"' $(SDK_NODE_JSON) | sponge $(SDK_NODE_JSON)
+	$Q jq '.author = "$(SDK_AUTHOR)"' $(SDK_NODE_JSON) | sponge $(SDK_NODE_JSON)
+	$Q jq '.keywords = [$(SDK_NODE_KEYWORDS)]' $(SDK_NODE_JSON) | sponge $(SDK_NODE_JSON)
+	$Q jq '.repository.url = "git+$(PACKAGE_URL).git"' $(SDK_NODE_JSON) | sponge $(SDK_NODE_JSON)
+	$Q rm -f $(SDK_NODE_DIR)/.gitignore
+	$Q rm -rf $(SDK_NODE_DIR)/.openapi-generator
+	$Q rm -f $(SDK_NODE_DIR)/.openapi-generator-ignore
+	$Q rm -f $(SDK_NODE_DIR)/git_push.sh
+
 ################
 # Distribution #
 ################
@@ -111,10 +139,11 @@ DIST_DIR = dist
 RELEASE_DIR = release
 
 .PHONY: dist
-dist: dist-angular
+dist: dist-angular dist-node
 	$Q rm -rf $(DIST_DIR)
 	$Q mkdir -p $(DIST_DIR)
 	$Q cp -rf $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
+	$Q cp -rf $(SDK_NODE_DIR)/dist $(DIST_DIR)/node
 
 .PHONY: dist-angular
 dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @
@@ -123,8 +152,16 @@ dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client co
 	  npm ci && \
 	  npm run build
 
-.PHONY: releae
+.PHONY: dist-node
+dist-node: ; $(info $(M) [Npm] Building distributable Node.JS SDK client code…) @
+	$Q cd $(SDK_NODE_DIR) && \
+	  npm install && \
+	  npm ci && \
+	  npm run build
+
+.PHONY: release
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
 	$Q rm -rf $(RELEASE_DIR)
 	$Q mkdir -p $(RELEASE_DIR)
 	$Q tar cvjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
+	$Q tar cvjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-node-$(SDK_RELEASE).tgz dist/node
