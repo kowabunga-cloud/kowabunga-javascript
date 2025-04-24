@@ -28,7 +28,6 @@ all: sdk ; @
 
 .PHONY: clean
 clean: ; $(info $(M) Cleaning build residues…) @
-	$Q rm -rf $(PACKAGES_DIR)
 	$Q rm -rf $(NODE_DIR)
 	$Q rm -rf $(DIST_DIR)
 	$Q rm -rf $(RELEASE_DIR)
