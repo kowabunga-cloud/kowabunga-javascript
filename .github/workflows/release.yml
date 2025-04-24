@@ -32,6 +32,7 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
+          scope: '@kowabunga-cloud'
       - run: make dist
       - run: cd packages/angular/dist && npm publish --provenance --access public
         env:
