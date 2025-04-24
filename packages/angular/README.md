@@ -1,4 +1,4 @@
-# @kowabunga-cloud/angular@0.52.5.0
+# @kowabunga-cloud/angular@0.52.50
 
 Kvm Orchestrator With A BUNch of Goods Added
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @kowabunga-cloud/angular@0.52.5.0 --save
+npm install @kowabunga-cloud/angular@0.52.50 --save
 ```
 
 _without publishing (not recommended):_
