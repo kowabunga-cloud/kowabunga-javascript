@@ -102,3 +102,17 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 	$Q rm -rf $(SDK_ANGULAR_DIR)/.openapi-generator
 	$Q rm -f $(SDK_ANGULAR_DIR)/.openapi-generator-ignore
 	$Q rm -f $(SDK_ANGULAR_DIR)/git_push.sh
+
+################
+# Distribution #
+################
+
+.PHONY: dist
+dist: dist-angular
+
+.PHONY: dist-angular
+dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @
+	$Q cd $(SDK_ANGULAR_DIR) && \
+	  npm install && \
+	  npm ci && \
+	  npm run build
