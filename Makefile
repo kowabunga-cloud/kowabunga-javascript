@@ -30,7 +30,7 @@ all: sdk ; @
 clean: ; $(info $(M) Cleaning build residues…) @
 	$Q rm -rf $(PACKAGES_DIR)
 	$Q rm -rf $(NODE_DIR)
-	$Q rm -rf $(RUNTIME_DIR)
+	$Q rm -rf $(DIST_DIR)
 	$Q rm -f openapitools.json
 	$Q rm -f package.json
 	$Q rm -f package-lock.json
@@ -42,7 +42,6 @@ clean: ; $(info $(M) Cleaning build residues…) @
 ######################
 
 NODE_DIR = node_modules
-RUNTIME_DIR = runtime
 
 YARN = $(NODE_DIR)/.bin/yarn
 GENERATOR = $(NODE_DIR)/.bin/openapi-generator-cli
@@ -107,8 +106,12 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 # Distribution #
 ################
 
+DIST_DIR = dist
+
 .PHONY: dist
 dist: dist-angular
+	$Q mkdir -p $(DIST_DIR)
+	$Q mv $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
 
 .PHONY: dist-angular
 dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @
