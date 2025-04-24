@@ -215,21 +215,24 @@ dist-node: ; $(info $(M) [Npm] Building distributable Node.JS SDK client code…
 	$Q cd $(SDK_NODE_DIR) && \
 	  npm install && \
 	  npm ci && \
-	  npm run build
+	  npm run build && \
+	  cp package.json dist/
 
 .PHONY: dist-aurelia
 dist-aurelia: ; $(info $(M) [Npm] Building distributable Aurelia SDK client code…) @
 	$Q cd $(SDK_AURELIA_DIR) && \
 	  npm install && \
 	  npm ci && \
-	  npm run build
+	  npm run build && \
+	  cp package.json dist/
 
 .PHONY: dist-rxjs
 dist-rxjs: ; $(info $(M) [Npm] Building distributable RxJS SDK client code…) @
 	$Q cd $(SDK_RXJS_DIR) && \
 	  npm install && \
 	  npm ci && \
-	  npm run build
+	  npm run build && \
+	  cp package.json dist/
 
 .PHONY: release
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
