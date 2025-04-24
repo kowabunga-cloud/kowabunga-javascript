@@ -13,7 +13,7 @@
 This is official JavaScript SDK for Kowabunga API.
 
 [![License: Apache License, Version 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://spdx.org/licenses/Apache-2.0.html)
-[![Build Status](https://github.com/kowabunga-cloud/kowabunga-javascript/actions/workflows/js.yml/badge.svg)](https://github.com/kowabunga-cloud/kowabunga-javascript/actions/workflows/js.yml)
+[![Build Status](https://github.com/kowabunga-cloud/kowabunga-javascript/actions/workflows/release.yml/badge.svg)](https://github.com/kowabunga-cloud/kowabunga-javascript/actions/workflows/js.yml)
 
 ## Current Releases
 
