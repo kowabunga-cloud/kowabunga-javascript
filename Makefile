@@ -163,5 +163,5 @@ dist-node: ; $(info $(M) [Npm] Building distributable Node.JS SDK client code…
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
 	$Q rm -rf $(RELEASE_DIR)
 	$Q mkdir -p $(RELEASE_DIR)
-	$Q tar cvjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
-	$Q tar cvjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-node-$(SDK_RELEASE).tgz dist/node
+	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
+	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-node-$(SDK_RELEASE).tgz dist/node
