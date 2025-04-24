@@ -72,7 +72,7 @@ SDK_AUTHOR = The Kowabunga Project
 SDK_KEYWORDS = "kowabunga"
 
 .PHONY: sdk
-sdk: sdk-angular sdk-node sdk-aurelia
+sdk: sdk-angular sdk-node sdk-aurelia sdk-rxjs
 
 SDK_ANGULAR_GENERATOR = typescript-angular
 SDK_ANGULAR_PKG_NAME = @$(SDK_PKG_NAME)/angular
@@ -159,6 +159,34 @@ sdk-aurelia: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate Aurelia SD
 	$Q rm -f $(SDK_AURELIA_DIR)/.openapi-generator-ignore
 	$Q rm -f $(SDK_AURELIA_DIR)/git_push.sh
 
+SDK_RXJS_GENERATOR = typescript-rxjs
+SDK_RXJS_PKG_NAME = @$(SDK_PKG_NAME)/rxjs
+SDK_RXJS_DIR = $(PACKAGES_DIR)/rxjs
+SDK_RXJS_JSON = $(SDK_RXJS_DIR)/package.json
+SDK_RXJS_DESCRIPTION = $(SDK_DESCRIPTION) RxJS
+SDK_RXJS_KEYWORDS = $(SDK_KEYWORDS), "rxjs"
+
+.PHONY: sdk-rxjs
+sdk-rxjs: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate RxJS SDK client code…) @
+	$Q $(GENERATOR) generate \
+	  -g $(SDK_RXJS_GENERATOR) \
+	  --package-name $(SDK_RXJS_PKG_NAME) \
+	  --openapi-normalizer KEEP_ONLY_FIRST_TAG_IN_OPERATION=true \
+          --additional-properties=npmVersion=$(SDK_RELEASE),npmName=$(SDK_RXJS_PKG_NAME),licenseName=$(SDK_LICENSE),supportsES6=true \
+	  -p packageVersion=$(SDK_RELEASE) \
+	  -p packageUrl="$(PACKAGE_URL)" \
+	  -i $(SDK_OPENAPI_SPEC) \
+	  -o $(SDK_RXJS_DIR) \
+	  $(OUT)
+	$Q jq '.description = "$(SDK_RXJS_DESCRIPTION)"' $(SDK_RXJS_JSON) | sponge $(SDK_RXJS_JSON)
+	$Q jq '.author = "$(SDK_AUTHOR)"' $(SDK_RXJS_JSON) | sponge $(SDK_RXJS_JSON)
+	$Q jq '.keywords = [$(SDK_RXJS_KEYWORDS)]' $(SDK_RXJS_JSON) | sponge $(SDK_RXJS_JSON)
+	$Q jq '.repository.url = "git+$(PACKAGE_URL).git"' $(SDK_RXJS_JSON) | sponge $(SDK_RXJS_JSON)
+	$Q rm -f $(SDK_RXJS_DIR)/.gitignore
+	$Q rm -rf $(SDK_RXJS_DIR)/.openapi-generator
+	$Q rm -f $(SDK_RXJS_DIR)/.openapi-generator-ignore
+	$Q rm -f $(SDK_RXJS_DIR)/git_push.sh
+
 ################
 # Distribution #
 ################
@@ -167,12 +195,13 @@ DIST_DIR = dist
 RELEASE_DIR = release
 
 .PHONY: dist
-dist: dist-angular dist-node dist-aurelia
+dist: dist-angular dist-node dist-aurelia dist-rxjs
 	$Q rm -rf $(DIST_DIR)
 	$Q mkdir -p $(DIST_DIR)
 	$Q cp -rf $(SDK_ANGULAR_DIR)/dist $(DIST_DIR)/angular
 	$Q cp -rf $(SDK_NODE_DIR)/dist $(DIST_DIR)/node
 	$Q cp -rf $(SDK_AURELIA_DIR)/dist $(DIST_DIR)/aurelia
+	$Q cp -rf $(SDK_RXJS_DIR)/dist $(DIST_DIR)/rxjs
 
 .PHONY: dist-angular
 dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client code…) @
@@ -195,6 +224,13 @@ dist-aurelia: ; $(info $(M) [Npm] Building distributable Aurelia SDK client code
 	  npm ci && \
 	  npm run build
 
+.PHONY: dist-rxjs
+dist-rxjs: ; $(info $(M) [Npm] Building distributable RxJS SDK client code…) @
+	$Q cd $(SDK_RXJS_DIR) && \
+	  npm install && \
+	  npm ci && \
+	  npm run build
+
 .PHONY: release
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
 	$Q rm -rf $(RELEASE_DIR)
@@ -202,3 +238,4 @@ release:  ; $(info $(M) [Dist] Creating release tarballs…) @
 	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
 	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-node-$(SDK_RELEASE).tgz dist/node
 	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-aurelia-$(SDK_RELEASE).tgz dist/aurelia
+	$Q tar cjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-rxjs-$(SDK_RELEASE).tgz dist/rxjs

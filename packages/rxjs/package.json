@@ -1,0 +1,27 @@
+{
+  "name": "@kowabunga-cloud/rxjs",
+  "version": "0.52.50",
+  "description": "Official Kowabunga SDK for RxJS",
+  "author": "The Kowabunga Project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kowabunga-cloud/kowabunga-javascript.git"
+  },
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "node_modules/.bin/tsc --outDir dist/",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "rxjs": "^7.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0 || ^5.0"
+  },
+  "keywords": [
+    "kowabunga",
+    "rxjs"
+  ]
+}
