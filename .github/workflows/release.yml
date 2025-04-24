@@ -64,6 +64,7 @@ jobs:
         with:
           name: javascript-package-distributions
           path: dist/
+      - run: make release
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -79,5 +80,5 @@ jobs:
         # `dist/` contains the built packages.
         run: >-
           gh release upload
-          "$GITHUB_REF_NAME" dist/**
+          "$GITHUB_REF_NAME" release/**
           --repo "$GITHUB_REPOSITORY"

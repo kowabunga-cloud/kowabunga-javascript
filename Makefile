@@ -31,6 +31,7 @@ clean: ; $(info $(M) Cleaning build residues…) @
 	$Q rm -rf $(PACKAGES_DIR)
 	$Q rm -rf $(NODE_DIR)
 	$Q rm -rf $(DIST_DIR)
+	$Q rm -rf $(RELEASE_DIR)
 	$Q rm -f openapitools.json
 	$Q rm -f package.json
 	$Q rm -f package-lock.json
@@ -108,6 +109,7 @@ sdk-angular: get-openapi-generator ; $(info $(M) [OpenAPIv3] Generate AngularJS 
 ################
 
 DIST_DIR = dist
+RELEASE_DIR = release
 
 .PHONY: dist
 dist: dist-angular
@@ -121,3 +123,9 @@ dist-angular: ; $(info $(M) [Npm] Building distributable AngularJS SDK client co
 	  npm install && \
 	  npm ci && \
 	  npm run build
+
+.PHONY: releae
+release:  ; $(info $(M) [Dist] Creating release tarballs…) @
+	$Q rm -rf $(RELEASE_DIR)
+	$Q mkdir -p $(RELEASE_DIR)
+	$Q tar cvjf $(RELEASE_DIR)/$(SDK_PKG_NAME)-angular-$(SDK_RELEASE).tgz dist/angular
