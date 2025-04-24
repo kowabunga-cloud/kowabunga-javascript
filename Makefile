@@ -65,7 +65,7 @@ PACKAGES_DIR = packages
 # use "heads/master" to build from latest
 SDK_OPENAPI_VERSION = tags/v0.52.5
 SDK_OPENAPI_SPEC = "https://raw.githubusercontent.com/kowabunga-cloud/openapi/refs/$(SDK_OPENAPI_VERSION)/openapi.yaml"
-SDK_PKG_NAME = kowabunga
+SDK_PKG_NAME = kowabunga-cloud
 SDK_LICENSE = Apache-2.0
 SDK_DESCRIPTION = Official Kowabunga SDK for
 SDK_AUTHOR = The Kowabunga Project
