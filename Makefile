@@ -216,7 +216,11 @@ dist-node: ; $(info $(M) [Npm] Building distributable Node.JS SDK client code…
 	  npm install && \
 	  npm ci && \
 	  npm run build && \
-	  cp package.json dist/
+	  cp package.json dist/ && \
+	  jq '.scripts.clean = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.build = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.test = ""' dist/package.json | sponge dist/package.json && \
+	  sed -i 's%dist/%%g' dist/package.json
 
 .PHONY: dist-aurelia
 dist-aurelia: ; $(info $(M) [Npm] Building distributable Aurelia SDK client code…) @
@@ -224,7 +228,11 @@ dist-aurelia: ; $(info $(M) [Npm] Building distributable Aurelia SDK client code
 	  npm install && \
 	  npm ci && \
 	  npm run build && \
-	  cp package.json dist/
+	  cp package.json dist/ && \
+	  jq '.scripts.build = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.prepare = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.test = ""' dist/package.json | sponge dist/package.json && \
+	  sed -i 's%/dist%%g' dist/package.json
 
 .PHONY: dist-rxjs
 dist-rxjs: ; $(info $(M) [Npm] Building distributable RxJS SDK client code…) @
@@ -232,7 +240,12 @@ dist-rxjs: ; $(info $(M) [Npm] Building distributable RxJS SDK client code…) @
 	  npm install && \
 	  npm ci && \
 	  npm run build && \
-	  cp package.json dist/
+	  cp package.json dist/ && \
+	  jq '.scripts.build = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.prepare = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.clean = ""' dist/package.json | sponge dist/package.json && \
+	  jq '.scripts.test = ""' dist/package.json | sponge dist/package.json && \
+	  sed -i 's%/dist%%g' dist/package.json
 
 .PHONY: release
 release:  ; $(info $(M) [Dist] Creating release tarballs…) @
