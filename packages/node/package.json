@@ -1,6 +1,6 @@
 {
   "name": "@kowabunga-cloud/node",
-  "version": "0.52.53",
+  "version": "0.52.54",
   "description": "Official Kowabunga SDK for Node.JS",
   "repository": {
     "type": "git",
