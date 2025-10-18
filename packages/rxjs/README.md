@@ -1,4 +1,4 @@
-## @kowabunga-cloud/rxjs@0.52.54
+## @kowabunga-cloud/rxjs@0.53.1
 
 This generator creates TypeScript/JavaScript client that utilizes [RxJS](https://rxjs-dev.firebaseapp.com/). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @kowabunga-cloud/rxjs@0.52.54 --save
+npm install @kowabunga-cloud/rxjs@0.53.1 --save
 ```
 
 _unPublished (not recommended):_

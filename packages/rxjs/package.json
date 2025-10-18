@@ -1,6 +1,6 @@
 {
   "name": "@kowabunga-cloud/rxjs",
-  "version": "0.52.54",
+  "version": "0.53.1",
   "description": "Official Kowabunga SDK for RxJS",
   "author": "The Kowabunga Project",
   "repository": {

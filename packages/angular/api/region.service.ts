@@ -1,5 +1,5 @@
 /**
- * Kowabunga API documentation
+ * Kowabunga API
  *
  * Contact: maintainers@kowabunga.cloud
  *
@@ -30,6 +30,8 @@ import { ApiErrorNotFound } from '../model/apiErrorNotFound';
 import { ApiErrorUnauthorized } from '../model/apiErrorUnauthorized';
 // @ts-ignore
 import { ApiErrorUnprocessableEntity } from '../model/apiErrorUnprocessableEntity';
+// @ts-ignore
+import { DnsRecord } from '../model/dnsRecord';
 // @ts-ignore
 import { Kiwi } from '../model/kiwi';
 // @ts-ignore
@@ -191,6 +193,79 @@ export class RegionService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: region,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Creates a new DNS record.
+     * @param regionId The ID of the region.
+     * @param dnsRecord DnsRecord payload.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createRegionDnsRecord(regionId: string, dnsRecord: DnsRecord, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DnsRecord>;
+    public createRegionDnsRecord(regionId: string, dnsRecord: DnsRecord, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DnsRecord>>;
+    public createRegionDnsRecord(regionId: string, dnsRecord: DnsRecord, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DnsRecord>>;
+    public createRegionDnsRecord(regionId: string, dnsRecord: DnsRecord, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (regionId === null || regionId === undefined) {
+            throw new Error('Required parameter regionId was null or undefined when calling createRegionDnsRecord.');
+        }
+        if (dnsRecord === null || dnsRecord === undefined) {
+            throw new Error('Required parameter dnsRecord was null or undefined when calling createRegionDnsRecord.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('ApiKeyAuth', 'X-API-Key', localVarHeaders);
+
+        // authentication (BearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('BearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/region/${this.configuration.encodeParam({name: "regionId", value: regionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/record`;
+        return this.httpClient.request<DnsRecord>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: dnsRecord,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -546,6 +621,65 @@ export class RegionService extends BaseService {
 
         let localVarPath = `/region/${this.configuration.encodeParam({name: "regionId", value: regionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns the IDs of DNS record objects.
+     * @param regionId The ID of the region.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listRegionDnsRecords(regionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public listRegionDnsRecords(regionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public listRegionDnsRecords(regionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public listRegionDnsRecords(regionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (regionId === null || regionId === undefined) {
+            throw new Error('Required parameter regionId was null or undefined when calling listRegionDnsRecords.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('ApiKeyAuth', 'X-API-Key', localVarHeaders);
+
+        // authentication (BearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('BearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/region/${this.configuration.encodeParam({name: "regionId", value: regionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/records`;
+        return this.httpClient.request<Array<string>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -1,6 +1,6 @@
 {
   "name": "@kowabunga-cloud/aurelia",
-  "version": "0.52.54",
+  "version": "0.53.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kowabunga-cloud/kowabunga-javascript.git"

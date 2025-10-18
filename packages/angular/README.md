@@ -1,8 +1,8 @@
-# @kowabunga-cloud/angular@0.52.54
+# @kowabunga-cloud/angular@0.53.1
 
 Kvm Orchestrator With A BUNch of Goods Added
 
-The version of the OpenAPI document: 0.52.5
+The version of the OpenAPI document: 0.53.1
 
 ## Building
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @kowabunga-cloud/angular@0.52.54 --save
+npm install @kowabunga-cloud/angular@0.53.1 --save
 ```
 
 _without publishing (not recommended):_
