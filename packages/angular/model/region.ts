@@ -25,5 +25,9 @@ export interface Region {
      * The region description.
      */
     description?: string;
+    /**
+     * Region domain name (e.g. myregion.kowabunga.acme.com).
+     */
+    domain: string;
 }
 
